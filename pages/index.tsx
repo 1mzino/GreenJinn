@@ -27,10 +27,13 @@ export const getServerSideProps: GetServerSideProps = async () => {
 const currencies = ["USD", "GBP", "EUR", "BTC", "ETH"];
 
 const fetcher: Fetcher<ITradingPair> = async (url: string) =>
-  await fetch(url, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  }).then((res) => res.json());
+  await fetch(url).then((res) => res.json());
+
+const chartFetcher = async (url: string) => {
+  const response = await fetch(url).then((res) => res.json());
+  console.log("RESPONSE:", response);
+  return response;
+};
 
 const Home: NextPage<ILandingPage> = ({
   averageTickerValues,
@@ -58,6 +61,14 @@ const Home: NextPage<ILandingPage> = ({
     fetcher
   );
 
+  const { data: tradingPairChartData, error: tradingPairChartError } = useSWR(
+    tradingPair
+      ? `https://www.bitstamp.net/api/v2/ticker/${tradingPair.toLowerCase()}`
+      : null,
+    chartFetcher
+  );
+
+  console.log(tradingPairChartData);
   return (
     <div className="h-screen w-screen flex flex-col touch-pan-y">
       <header className="p-4 lg:px-8 bg-white dark:bg-black/20 flex justify-end border-b border-b-gray-200 dark:border-b-gray-800">

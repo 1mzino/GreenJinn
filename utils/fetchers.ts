@@ -1,7 +1,7 @@
 export const getSupportedCurrencies = async () => {
   try {
     const supportedCurrencies = await fetch(
-      "http://localhost:3000/api/currencies"
+      "https://green-jinn-fe-test.vercel.app/api/currencies"
     ).then((res) => res.json());
     return supportedCurrencies;
   } catch (err) {
