@@ -56,11 +56,23 @@ export const getAverageValues = async (supportedCurrencies: string[]) => {
       const res3 = await fetchBitFinex(currency);
 
       const values = [res1, res2, res3];
-      console.log(values);
       const total = values.reduce((acc, c) => acc + c, 0);
+
       if (total) {
         return { currency, price: total / values.length };
       }
     })
   );
+};
+
+export const getTradingPairs = async () => {
+  try {
+    const response = await fetch(
+      `https://www.bitstamp.net/api/v2/trading-pairs-info/`
+    ).then((res) => res.json());
+
+    return response;
+  } catch (err) {
+    throw new Error("Error fetching ticker value from Coinbase API");
+  }
 };
